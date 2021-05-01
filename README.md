@@ -7,8 +7,8 @@ KIcon follows the freedesktop.org specifications for [Icon Themes](https://speci
 import java.io.File
 import dev.jhseo.Icon
 
-val fileManagerIcon: File = Icon.fetch("system-file-manager")
-val hicolorSpotifyIcon: File = Icon.fetch("spotify", "hicolor")
+val fileManagerIcon: File? = Icon.fetch("system-file-manager")
+val hicolorSpotifyIcon: File? = Icon.fetch("spotify", "hicolor")
 ```
 
 # TODO
