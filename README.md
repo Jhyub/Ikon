@@ -11,7 +11,7 @@ val fileManagerIcon: File = Icon.fetch("system-file-manager")
 val hicolorSpotifyIcon: File = Icon.fetch("spotify", "hicolor")
 ```
 
-#TODO
+# TODO
 - [ ] Full X11 support on GNU/Linux  
 - [ ] Full X11 support on BSD-like operating systems  
 - [ ] Full wayland support  
