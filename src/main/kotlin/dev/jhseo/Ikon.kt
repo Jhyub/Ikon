@@ -2,7 +2,7 @@ package dev.jhseo
 
 import java.io.File
 
-object Icon {
+object Ikon {
     private val iconThemes: MutableMap<String, MutableList<File>> = mutableMapOf()
     private val individualIcons: MutableMap<String, File> = mutableMapOf()
 
