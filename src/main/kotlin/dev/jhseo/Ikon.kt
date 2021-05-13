@@ -137,6 +137,6 @@ object Ikon {
                 }
             }
         }
-        return individualIcons[name]
+        return fetch(name, "hicolor") ?: individualIcons[name]
     }
 }
