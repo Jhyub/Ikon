@@ -1,3 +1,7 @@
 .gradle/
 .idea/
 build/
+*.bat
+gradlew
+*.properties
+gradle/
