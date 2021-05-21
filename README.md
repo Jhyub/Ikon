@@ -15,4 +15,4 @@ val hicolorSpotifyIcon: File? = Ikon.fetch("spotify", "hicolor")
 # TODO
 - [ ] Full X11 support on Linux
 - [ ] Full Wayland support
-- [ ] Full support on *nix systems(BSD, Solaris, etc)
+- [ ] Full support on *nix systems(*BSD, Solaris, etc)
