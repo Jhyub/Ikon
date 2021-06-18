@@ -6,40 +6,25 @@ object Ikon {
     private val iconThemes: MutableMap<String, MutableList<File>> = mutableMapOf()
     private val individualIcons: MutableMap<String, File> = mutableMapOf()
 
-    private val home: File
-    private val xdgDataHome: File
-    private val xdgDataDirs: List<File>
-    private val xdgConfigHome: File
-    private val xdgConfigDirs: List<File>
+    private val home: File? = System.getenv("HOME")?.let { File(it) }
+    private val xdgDataHome: File? = System.getenv("XDG_DATA_HOME")?.let { File(it) }
+        ?: home?.resolve(".local/share")
+    private val xdgDataDirs: List<File> = (System.getenv("XDG_DATA_DIRS") ?: "/usr/local/share/:/usr/share/")
+        .split(":")
+        .map { File(it) }
+    private val xdgConfigHome: File? = System.getenv("XDG_CONFIG_HOME")?.let { File(it) }
+        ?: home?.resolve(".config")
+    private val xdgConfigDirs: List<File> = (System.getenv("XDG_CONFIG_DIRS") ?: "/etc/xdg")
+        .split(":")
+        .map { File(it) }
 
     init {
-        if (System.getenv("HOME").isNullOrBlank())
-            throw Exception("Environment variable HOME is null or blank.")
-
-        home = File(System.getenv("HOME"))
-        xdgDataHome = if (System.getenv("XDG_DATA_HOME").isNullOrBlank()) {
-            home.resolve(".local/share")
-        } else {
-            File(System.getenv("XDG_DATA_HOME"))
-        }
-        xdgDataDirs = (System.getenv("XDG_DATA_DIRS") ?: "/usr/local/share/:/usr/share/")
-            .split(":")
-            .map { File(it) }
-        xdgConfigHome = if (System.getenv("XDG_CONFIG_HOME").isNullOrBlank()) {
-            home.resolve(".config")
-        } else {
-            File(System.getenv("XDG_CONFIG_HOME"))
-        }
-        xdgConfigDirs = (System.getenv("XDG_CONFIG_DIRS") ?: "/etc/xdg")
-            .split(":")
-            .map { File(it) }
-
         // By default, apps should look in $HOME/.icons (for backwards compatibility),
         // in $XDG_DATA_DIRS/icons and in /usr/share/pixmaps (in that order).
         // - freedesktop.org icon theme specifications version 0.13
-        listOf(
-            home.resolve(".icons"),
-            xdgDataHome.resolve("icons"),
+        listOfNotNull(
+            home?.resolve(".icons"),
+            xdgDataHome?.resolve("icons"),
             *xdgDataDirs.map { it.resolve("icons") }.toTypedArray(),
             File("/usr/share/pixmaps"),
         ).forEach {
@@ -74,20 +59,18 @@ object Ikon {
     }
 
     private fun gtkThemeName(): String? {
-        val gtk4 = xdgConfigHome.resolve("gtk-4.0").resolve("settings.ini")
-        val gtk3 = xdgConfigHome.resolve("gtk-3.0").resolve("settings.ini")
+        val gtk4 = xdgConfigHome?.resolve("gtk-4.0")?.resolve("settings.ini")
+        val gtk3 = xdgConfigHome?.resolve("gtk-3.0")?.resolve("settings.ini")
 
-        return if (gtk4.exists()) {
-            parseIni(gtk4, "gtk-icon-theme-name", "Settings")
-        } else if (gtk3.exists()) {
-            parseIni(gtk3, "gtk-icon-theme-name", "Settings")
-        } else {
-            null
+        return when {
+            gtk4?.exists() == true -> parseIni(gtk4, "gtk-icon-theme-name", "Settings")
+            gtk3?.exists() == true -> parseIni(gtk3, "gtk-icon-theme-name", "Settings")
+            else -> null
         }
     }
 
     private fun plasmaThemeName(): String? =
-        parseIni(xdgConfigHome.resolve("kdeglobals"), "Theme", "Icons")
+        xdgConfigHome?.let { parseIni(it.resolve("kdeglobals"), "Theme", "Icons") }
 
     fun themeName(): String? =
         gtkThemeName() ?: plasmaThemeName()
