@@ -11,4 +11,5 @@ import dev.jhseo.Ikon
 
 val fileManagerIcon: File? = Ikon.fetch("system-file-manager")
 val hicolorSpotifyIcon: File? = Ikon.fetch("spotify", "hicolor")
+val themeName: String? = Ikon.themeName()
 ```
