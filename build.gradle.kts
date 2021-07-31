@@ -28,7 +28,7 @@ publishing {
                         id.set("Jhyub")
                         name.set("Janghyub Seo")
                         email.set(
-                            "seojanghyeob at gmail dot com"
+                            "jhyub06 at gmail dot com"
                                 .replace(" at ", "@")
                                 .replace(" dot ", ".")
                         )
